@@ -1,112 +1,79 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
-import React from 'react';
-import type {Node} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
-
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
+import {View, Text, TouchableOpacity, TextInput} from 'react-native';
+import Styles from './style';
+import React, {useState} from 'react';
+import {calcular} from './functions';
+export default function App() {
+  const [texto1, setTexto1] = useState(0);
+  const [texto2, setTexto2] = useState(0);
+  const [operacao, setOperacao] = useState('+');
+  const [resultado, setResultado] = useState(0);
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
+    <View style={Styles.container}>
+      <Text style={Styles.texto2}>Calculadora</Text>
+      <View style={Styles.linha}>
+        <View>
+          <TouchableOpacity
+            onPress={() => setOperacao('+')}
+            style={[
+              Styles.botao,
+              operacao === '+' ? Styles.selecionado : false,
+            ]}>
+            <Text style={Styles.texto}>+</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => setOperacao('-')}
+            style={[
+              Styles.botao,
+              operacao === '-' ? Styles.selecionado : false,
+            ]}>
+            <Text style={Styles.texto}>-</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => setOperacao('x')}
+            style={[
+              Styles.botao,
+              operacao === 'x' ? Styles.selecionado : false,
+            ]}>
+            <Text style={Styles.texto}>x</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => setOperacao('/')}
+            style={[
+              Styles.botao,
+              operacao === '/' ? Styles.selecionado : false,
+            ]}>
+            <Text style={Styles.texto}>/</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={{alignItems: 'flex-start'}}>
+          <TextInput
+            value={texto1}
+            onChangeText={tex => {
+              setTexto1(tex);
+            }}
+            keyboardType={'number-pad'}
+            style={Styles.input}></TextInput>
+          <TextInput
+            value={texto2}
+            onChangeText={tex => {
+              setTexto2(tex);
+            }}
+            keyboardType={'number-pad'}
+            style={Styles.input2}></TextInput>
+
+          <TouchableOpacity
+            onPress={() => calcular(texto1, texto2, operacao, setResultado)}
+            style={Styles.botao2}>
+            <Text style={Styles.texto}>Calcular</Text>
+          </TouchableOpacity>
+
+          <Text style={Styles.resultado}>{resultado}</Text>
+        </View>
+      </View>
     </View>
   );
-};
-
-const App: () => Node = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-};
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
-
-export default App;
+}
